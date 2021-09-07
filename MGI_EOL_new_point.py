@@ -5,7 +5,12 @@ import matplotlib.pyplot as plt
 from tkinter import filedialog as fd
 import time as t
 
-def loadFunction():
+def print_full(x):
+    pd.set_option('display.max_rows', len(x))
+    print(x)
+    pd.reset_option('display.max_rows')
+
+def load_function():
 
     #Load Multiple files
     fileNames=fd.askopenfilenames()
@@ -35,14 +40,15 @@ def loadFunction():
         loadTime=loadTime+deltaT
     print("Finished loading files, total load time: "+str(round(loadTime,3))+" seconds")
 
+
     #Mesh all of the dataframes from dataList together into one dataFrame
     finalFrame=pd.concat(dataList,ignore_index=True)
-
+    print_full(finalFrame)
     #Return dataframe and used columns
     return finalFrame,cols,fileNames
 
 def main():
-    finalFrame,cols,fileNames = loadFunction()
+    finalFrame,cols,fileNames = load_function()
     # This does calculates the |Vdq| amplitude for each unit and makes in a new column called ICM2 - Udq (V)
     finalFrame['ICM2 - Udq (V)'] = (finalFrame["ICM2 - Ud (V)"] ** 2 + finalFrame["ICM2 - Uq (V)"] ** 2) ** 0.5
     cols.append("ICM2 - Udq (V)")
